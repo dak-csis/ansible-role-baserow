@@ -1,2 +1,19 @@
 ---
 # defaults file for baserow
+baserow_install_nodejs: true
+baserow_install_yarn: true
+baserow_apt_dependencies:
+  - postgresql
+  - postgresql-contrib
+  - redis-server
+  - python3
+  - python3-pip
+  - virtualenv
+  - libpq-dev
+  - libmysqlclient-dev
+baserow_db_name: baserow
+baserow_db_user: baserow
+baserow_db_password: changeme
+baserow_system_user: baserow
+baserow_git_repo: 'https://gitlab.com/bramw/baserow'
+baserow_base_path: /opt/baserow

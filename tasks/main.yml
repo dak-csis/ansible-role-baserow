@@ -1,2 +1,60 @@
 ---
 # tasks file for baserow
+- include_tasks: nodejs.yml
+  when: baserow_install_nodejs | bool
+
+- include_tasks: yarn.yml
+  when: baserow_install_yarn | bool
+
+- name: Add redis-server ppa
+  ansible.builtin.apt_repository:
+    - ppa:chris-lea/redis-server
+
+- name: Install baserow apt dependencies
+  ansible.builtin.apt:
+    name: {{baserow_apt_dependenceis}}
+    state: present
+
+- name: Create postgresql database
+  community.postgresql.postgresql_db:
+    name: {{baserow_db_name}}
+
+- name: Add {{baserow_db_user}} to {{baserow_db_name}}
+  community.postgresql.postgresql_user:
+    name: {{baserow_db_user}}
+    password: {{baserow_db_password}}
+    db: {{baserow_db_name}}
+    priv: 'ALL'
+
+- name: Set redis.conf to supervised by systemd
+  ansible.builtin.lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: '^supervised'
+    line: supervised systemd
+  notify: restart redis
+
+- name: Ensure redis is started and enabled
+  ansible.builtin.systemd:
+    name: redis
+    enabled: true
+    state: started
+
+- name: Create baserow user
+  ansible.builtin.user:
+    name: {{baserow_system_user}}
+
+- name: Clone baserow git repo
+  ansible.builtin.git:
+    repo: {{baserow_git_repo}}
+    dest: {{baserow_base_path}}
+
+- name: Create media directory
+  ansible.builtin.file:
+    path: "{{baserow_base_path}}/media"
+    mode: 0755
+    owner: {{baserow_system_user}}
+
+- name: baserow virtualenv
+  ansible.builtin.pip:
+    virtualenv: "{{baserow_base_path}}/backend/env"
+    virtualenv_python: python3
