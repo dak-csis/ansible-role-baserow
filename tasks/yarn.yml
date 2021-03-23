@@ -2,14 +2,14 @@
 # Install yarn when baserow_install_yarn: true
 # Inspiration from angristan/ansible-yarn
 - name: Add Yarn apt key
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://dl.yarnpkg.com/debian/pubkey.gpg
 
 - name: Add Yarn repository
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "deb https://dl.yarnpkg.com/debian/ stable main"
     filename: yarn
 
 - name: Install Yarn
-  apt:
+  ansible.builtin.apt:
     name: yarn
