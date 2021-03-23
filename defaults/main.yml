@@ -18,3 +18,4 @@ baserow_db_password: changeme
 baserow_system_user: baserow
 baserow_git_repo: 'https://gitlab.com/bramw/baserow'
 baserow_base_path: /opt/baserow
+baserow_venv_path: "{{baserow_base_path}}/backend"

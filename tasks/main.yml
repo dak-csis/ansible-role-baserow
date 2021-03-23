@@ -58,3 +58,6 @@
   ansible.builtin.pip:
     virtualenv: "{{baserow_base_path}}/backend/env"
     virtualenv_python: python3
+  creates: "{{baserow_venv_path}}/env/bin/activate"
+
+
