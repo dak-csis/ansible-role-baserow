@@ -1,6 +1,7 @@
 ---
 # defaults file for baserow
 baserow_install_nodejs: true
+baserow_nodejs_version: 10.x
 baserow_install_yarn: true
 baserow_apt_dependencies:
   - postgresql
