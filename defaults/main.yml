@@ -9,6 +9,7 @@ baserow_apt_dependencies:
   - redis-server
   - python3
   - python3-pip
+  - python3-psycopg2
   - virtualenv
   - libpq-dev
   - libmysqlclient-dev

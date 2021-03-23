@@ -1,7 +1,6 @@
 ---
 # handlers file for baserow
-handlers:
-  - name: restart redis
-    ansible.builtin.service:
-      name: redis
-      state: restarted
+- name: restart redis
+  ansible.builtin.service:
+    name: redis
+    state: restarted
