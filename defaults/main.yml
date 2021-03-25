@@ -1,8 +1,15 @@
 ---
 # defaults file for baserow
+
+# Set to no if you already install nodejs otherwise.
+# Baserow requires nodejs 10.x
 baserow_install_nodejs: true
 baserow_nodejs_version: 10.x
+
+# Set to no if you already install yarn otherwise.
 baserow_install_yarn: true
+
+# Some system dependencies for baserow
 baserow_apt_dependencies:
   - postgresql
   - postgresql-contrib
@@ -13,10 +20,36 @@ baserow_apt_dependencies:
   - virtualenv
   - libpq-dev
   - libmysqlclient-dev
+  - nginx
+  - supervisor
+
+# Baserow user information.
+# IMPORTANT: Change the db password
 baserow_db_name: baserow
 baserow_db_user: baserow
 baserow_db_password: changeme
 baserow_system_user: baserow
+
+# Where to pull baserow from
 baserow_git_repo: 'https://gitlab.com/bramw/baserow'
+
+# Paths
 baserow_base_path: /opt/baserow
 baserow_venv_path: "{{baserow_base_path}}/backend"
+
+# Define domain names for all vhosts:
+baserow_dns_api: api.example.com
+baserow_dns_frontend: baserow.example.com
+baserow_dns_media: media.example.com
+
+# Choose your own adventure:
+# Use same ssl cert for all or create an all-in-one.
+baserow_ssl_certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+baserow_ssl_key: "/etc/ssl/private/ssl-cert-snakeoil.key"
+
+baserow_ssl_crt_api: "{{baserow_ssl_crt}}"
+baserow_ssl_key_api: "{{baserow_ssl_key}}"
+baserow_ssl_crt_frontend: "{{baserow_ssl_crt}}"
+baserow_ssl_key_frontend: "{{baserow_ssl_key}}"
+baserow_ssl_crt_media: "{{baserow_ssl_crt}}"
+baserow_ssl_key_media: "{{baserow_ssl_key}}"

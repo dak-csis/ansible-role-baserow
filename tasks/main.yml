@@ -12,14 +12,14 @@
     state: present
 
 - name: Create postgresql database
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
   community.postgresql.postgresql_db:
     name: "{{baserow_db_name}}"
 
 - name: Add "{{baserow_db_user}}" to "{{baserow_db_name}}"
-  become: yes
+  become: true
   become_method: sudo
   become_user: postgres
   community.postgresql.postgresql_user:
@@ -60,3 +60,30 @@
 - name: Install yarn requirements
   community.general.yarn:
     path: "{{baserow_base_path}}/web-frontend"
+
+- name: Build nuxt frontend with shell
+  shell: |
+    {{baserow_base_path}}/web-frontend/node_modules/nuxt/bin/nuxt.js \
+    build --config-file \
+    {{baserow_base_path}}/web-frontend/config/nuxt.config.demo.js
+  args:
+    chdir: "{{baserow_base_path}}/web-frontend"
+
+- name: Install nginx templates
+  ansible.builtin.template:
+    src: "{{item.src}}"
+    dest: "/etc/nginx/sites-enabled/{{item.dest}}"
+  loop:
+    - {
+      src: "baserow-backend.conf.j2",
+      dest: "/etc/nginx/sites-enabled/baserow-backend.conf"
+    }
+    - {
+      src: "baserow-frontend.conf.j2",
+      dest: "/etc/nginx/sites-enabled/baserow-frontend.conf"
+    }
+    - {
+      src: "baserow-media.conf.j2",
+      dest: "/etc/nginx/sites-enabled/baserow-media.conf"
+    }
+  notify: restart nginx
