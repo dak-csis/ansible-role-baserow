@@ -1,0 +1,20 @@
+server {
+    listen 443 ssl http2;
+    server_name "{{baserow_dns_media}}";
+    autoindex off;
+
+    ssl_certificate {{baserow_ssl_crt_media}};
+    ssl_certificate_key {{baserow_ssl_key_media}};
+
+    gzip on;
+    gzip_disable "msie6";
+
+    location / {
+       root {{baserow_base_path}}/media;
+    }
+
+    location /user_files {
+        root {{baserow_base_path}}/media;
+        add_header Content-disposition "attachment; filename=$1";
+    }
+}
