@@ -57,9 +57,21 @@
     virtualenv_python: python3
     requirements: "{{baserow_venv_path}}/requirements/base.txt"
 
+- name: Check if yarn requirements are installed
+  stat:
+    path: "{{baserow_base_path}}/web-frontend/node_modules"
+  register: baserow_yarn_node_modules
+
 - name: Install yarn requirements
   community.general.yarn:
     path: "{{baserow_base_path}}/web-frontend"
+    production: true
+  when: baserow_yarn_node_modules.stat.exists == false
+
+- name: Check if nuxt.js build is complete
+  stat:
+    path: "{{baserow_base_path}}/web-frontend/.nuxt"
+  register: baserow_nuxt
 
 - name: Build nuxt frontend with shell
   shell: |
@@ -68,6 +80,7 @@
     {{baserow_base_path}}/web-frontend/config/nuxt.config.demo.js
   args:
     chdir: "{{baserow_base_path}}/web-frontend"
+  when: baserow_nuxt.stat.exists == false
 
 - name: Install nginx templates
   ansible.builtin.template:
