@@ -76,14 +76,14 @@
   loop:
     - {
       src: "baserow-backend.conf.j2",
-      dest: "/etc/nginx/sites-enabled/baserow-backend.conf"
+      dest: "baserow-backend.conf"
     }
     - {
       src: "baserow-frontend.conf.j2",
-      dest: "/etc/nginx/sites-enabled/baserow-frontend.conf"
+      dest: "baserow-frontend.conf"
     }
     - {
       src: "baserow-media.conf.j2",
-      dest: "/etc/nginx/sites-enabled/baserow-media.conf"
+      dest: "baserow-media.conf"
     }
   notify: restart nginx
