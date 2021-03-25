@@ -25,3 +25,8 @@
   ansible.builtin.apt:
     name: "nodejs={{ baserow_nodejs_version|regex_replace('x', '') }}*"
     state: present
+
+- name: Pin nodejs
+  ansible.builtin.dpkg_selections:
+    name: "nodejs"
+    selection: hold

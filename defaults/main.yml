@@ -47,9 +47,9 @@ baserow_dns_media: media.example.com
 baserow_ssl_certificate: "/etc/ssl/certs/ssl-cert-snakeoil.pem"
 baserow_ssl_key: "/etc/ssl/private/ssl-cert-snakeoil.key"
 
-baserow_ssl_crt_api: "{{baserow_ssl_crt}}"
+baserow_ssl_crt_api: "{{baserow_ssl_certificate}}"
 baserow_ssl_key_api: "{{baserow_ssl_key}}"
-baserow_ssl_crt_frontend: "{{baserow_ssl_crt}}"
+baserow_ssl_crt_frontend: "{{baserow_ssl_certificate}}"
 baserow_ssl_key_frontend: "{{baserow_ssl_key}}"
-baserow_ssl_crt_media: "{{baserow_ssl_crt}}"
+baserow_ssl_crt_media: "{{baserow_ssl_certificate}}"
 baserow_ssl_key_media: "{{baserow_ssl_key}}"
