@@ -51,6 +51,13 @@
     owner: "{{baserow_system_user}}"
     state: directory
 
+- name: Create baserow logs dir
+  ansible.builtin.file:
+    path: /var/log/baserow
+    mode: 0755
+    owner: "{{baserow_system_user}}"
+    state: directory
+
 - name: baserow virtualenv
   ansible.builtin.pip:
     virtualenv: "{{baserow_base_path}}/backend/env"
@@ -100,3 +107,48 @@
       dest: "baserow-media.conf"
     }
   notify: restart nginx
+
+- name: Migrate postgresql db
+  shell: |
+    source env/bin/activate
+    baserow migrate
+    deactivate
+  environment:
+    DJANGO_SETTINGS_MODULE: 'baserow.config.settings.base'
+    DATABASE_PASSWORD: "{{baserow_db_password}}"
+    DATABASE_HOST: 'localhost'
+  args:
+    chdir: "{{baserow_venv_path}}"
+    executable: "/bin/bash"
+
+- name: Install supervisorctl templates
+  ansible.builtin.template:
+    src: "{{item.src}}"
+    dest: "/etc/supervisor/conf.d/{{item.dest}}"
+  loop:
+    - {
+      src: "supervisor-baserow-backend.conf.j2",
+      dest: "baserow-backend.conf"
+    }
+    - {
+      src: "supervisor-baserow-frontend.conf.j2",
+      dest: "baserow-frontend.conf"
+    }
+
+- name: reread supervisorctl
+  community.general.supervisorctl:
+    state: present
+    name: "{{item}}"
+  loop:
+    - gunicorn
+    - nuxt
+    - worker
+
+- name: update supervisorctl
+  community.general.supervisorctl:
+    state: restarted
+    name: "{{item}}"
+  loop:
+    - gunicorn
+    - nuxt
+    - worker

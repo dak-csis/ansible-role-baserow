@@ -1,0 +1,12 @@
+[supervisord]
+nodaemon = true
+
+[program:nuxt]
+environment =
+    PRIVATE_BACKEND_URL='http://localhost:8000',
+    PUBLIC_WEB_FRONTEND_URL='https://{{baserow_dns_frontend}}',
+    PUBLIC_BACKEND_URL='https://{{baserow_dns_api}}'
+directory = {{baserow_base_path}}/web-frontend
+command = sh -c './node_modules/.bin/nuxt start --hostname 127.0.0.1 --config-file ./config/nuxt.config.demo.js'
+stdout_logfile=/var/log/baserow/frontend.log
+stderr_logfile=/var/log/baserow/frontend.error

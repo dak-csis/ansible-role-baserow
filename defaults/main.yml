@@ -1,6 +1,4 @@
 ---
-# defaults file for baserow
-
 # Set to no if you already install nodejs otherwise.
 # Baserow requires nodejs 10.x
 baserow_install_nodejs: true
@@ -29,6 +27,7 @@ baserow_db_name: baserow
 baserow_db_user: baserow
 baserow_db_password: changeme
 baserow_system_user: baserow
+baserow_secret_key: changeme
 
 # Where to pull baserow from
 baserow_git_repo: 'https://gitlab.com/bramw/baserow'
